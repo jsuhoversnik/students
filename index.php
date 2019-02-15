@@ -1,39 +1,82 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Jake
- * Date: 1/11/2019
- * Time: 10:24 AM
- */
 
-//turn on error reporting
-ini_set('display_errors',1);
-error_reporting(E_ALL);
+//Required files
+require_once 'vendor/autoload.php';
+require_once 'model/db-functions.php';
 
-//require autoload
-require_once('vendor/autoload.php');
-require_once('model/db-functions.php');
+//Start session AFTER autoload
+session_start();
 
-//connect to database
-$dbh = connect();
-print_r($dbh);
-
-//create and instance of the Base class
+//Create an instance of the Base class
 $f3 = Base::instance();
-//turn on fat free error reporting
-$f3->set('DEBUG',3);
 
-//define a default route
-$f3->route('GET /', function($f3){
+//Debugging
+require_once '/home/tostrand/public_html/debug.php';
+
+//Connect to the database
+$dbh = connect();
+
+//Define a default route
+$f3->route('GET /', function($f3) {
 
     $students = getStudents();
-    print_r($students);
-    $f3->set('students',$students);
+    $f3->set('students', $students);
 
+    //load a template
     $template = new Template();
     echo $template->render('views/all-students.html');
-
 });
 
-//run fat free
+//Define a route to view a student summary
+$f3->route('GET /summary', function() {
+
+    //load a template
+    $template = new Template();
+    echo $template->render('views/view-student.html');
+});
+
+//Define a route to add a student
+$f3->route('GET|POST /add', function($f3) {
+
+    //print_r($_POST);
+    /*
+     * Array (  [sid] => 5678
+     *          [last] => Shin
+     *          [first] => Jen
+     *          [birthdate] => 2000-08-08
+     *          [gpa] => 4.0
+     *          [advisor] => 1
+     *          [submit] => Submit )
+     */
+
+    if(isset($_POST['submit'])) {
+
+        //Get the form data
+        $sid = $_POST['sid'];
+        $last = $_POST['last'];
+        $first = $_POST['first'];
+        $birthdate = $_POST['birthdate'];
+        $gpa = $_POST['gpa'];
+        $advisor = $_POST['advisor'];
+
+        //Validate the data
+
+        //Add the student
+        $success = addStudent($sid, $last, $first, $birthdate,
+            $gpa, $advisor);
+        if($success) {
+            $student = new Student($sid, $last, $first, $birthdate,
+                $gpa, $advisor);
+            $_SESSION['student'] = $student;
+
+            $f3->reroute('/summary');
+        }
+    }
+
+    //load a template
+    $template = new Template();
+    echo $template->render('views/add-student.html');
+});
+
+//Run fat free
 $f3->run();
