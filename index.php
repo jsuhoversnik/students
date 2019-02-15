@@ -28,8 +28,11 @@ $f3->route('GET /', function($f3) {
 });
 
 //Define a route to view a student summary
-$f3->route('GET /summary', function() {
+$f3->route('GET /summary/@sid', function() {
 
+    function($f3, $params){
+        $sid = $parasm['sid'];
+    }
     //load a template
     $template = new Template();
     echo $template->render('views/view-student.html');

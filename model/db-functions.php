@@ -1,6 +1,7 @@
 <?php
 
-require("/home/tostrand/config.php");
+//require("/home/tostrand/config.php");
+require("/home/jbosegre/config.php");
 
 function connect()
 {
