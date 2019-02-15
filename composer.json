@@ -1,0 +1,15 @@
+{
+  "name": "jsuhover/328/students",
+  "authors": [
+    {
+      "name": "Jake Suhoversnik",
+      "email": "jsuhoversnik@mail.greenriver.edu"
+    }
+  ],
+  "require": {
+    "bcosca/fatfree-core": "dev-master"
+  },
+  "autoload": {
+    "classmap": ["classes/"]
+  }
+}
