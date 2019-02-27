@@ -1,3 +1,7 @@
-<h3>Student added successfully!!</h3>
+<h3>Student Summary</h3>
 
-{{ @SESSION['student']->toString() }}
+<p>{{ @first }} {{ @last }}</p>
+<p>SID: {{ @sid }}</p>
+<p>GPA: {{ @gpa }}</p>
+<check if=" {{ @gpa >= 2.00}}"><p>Passing</p></check>
+<check if=" {{ @gpa <= 2.00}}"><p>Failing</p></check>

@@ -1,7 +1,7 @@
 <?php
 
 //require("/home/tostrand/config.php");
-require("/home/jbosegre/config.php");
+require("/home2/jsuhover/config.php");
 
 function connect()
 {
@@ -62,4 +62,28 @@ function addStudent($sid, $last, $first, $birthdate, $gpa, $advisor)
 
     //5. return the result
     return $success;
+}
+
+function getStudent($sid)
+{
+    global $dbh;
+
+    //1. define the query
+    $sql = "SELECT * FROM student WHERE sid = :sid";
+
+    //2. prepare the statement
+    $statement = $dbh->prepare($sql);
+
+    //3. bind parameters
+    $statement->bindParam(':sid', $sid, PDO::PARAM_STR);
+
+    //4. execute the statement
+    $statement->execute();
+
+    //5. return the result
+    $result = $statement->fetch(PDO::FETCH_ASSOC);
+
+    //print_r($result);
+    return new Student($result['sid'], $result['last'], $result['first'],
+        $result['birthdate'], $result['gpa'], $result['advisor']);
 }

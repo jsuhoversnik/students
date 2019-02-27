@@ -11,7 +11,7 @@ session_start();
 $f3 = Base::instance();
 
 //Debugging
-require_once '/home/tostrand/public_html/debug.php';
+//require_once '/home/tostrand/public_html/debug.php';
 
 //Connect to the database
 $dbh = connect();
@@ -28,11 +28,17 @@ $f3->route('GET /', function($f3) {
 });
 
 //Define a route to view a student summary
-$f3->route('GET /summary/@sid', function() {
-
+$f3->route('GET /summary/@sid',
     function($f3, $params){
-        $sid = $parasm['sid'];
-    }
+        $sid = $params['sid'];
+        $student = getStudent($sid);
+        $f3->set('student', $student);
+        $f3->set('first', $student->getFirst());
+        $f3->set('last', $student->getLast());
+        $f3->set('sid', $student->getSid());
+        $f3->set('birthdate', $student->getBirthdate());
+        $f3->set('gpa', $student->getGpa());
+
     //load a template
     $template = new Template();
     echo $template->render('views/view-student.html');
@@ -72,7 +78,7 @@ $f3->route('GET|POST /add', function($f3) {
                 $gpa, $advisor);
             $_SESSION['student'] = $student;
 
-            $f3->reroute('/summary');
+            $f3->reroute('/summary/sid');
         }
     }
 

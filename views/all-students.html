@@ -2,7 +2,7 @@
 
 <ol>
 <repeat group="{{ @students }}" value="{{ @student }}">
-    <li><a href="{{ @BASE }}/views/{{ @student['sid'] }}">
+    <li><a href="{{ @BASE }}/summary/{{ @student['sid'] }}">
         {{ @student['last'] }}, {{ @student['first'] }}</a>
     </li>
 </repeat>
